@@ -18,7 +18,7 @@ namespace RabbitMQ.publisher
         static void Main(string[] args)
         {
             var factory = new ConnectionFactory();
-            factory.Uri = new Uri("amqps://nxdranwu:n_3nr-xZlXx0NoCWuFP05gTqZfp7_hwK@sparrow.rmq.cloudamqp.com/nxdranwu ");
+            factory.Uri = new Uri("amqps://nxdranwu:n_3nr-xZlXx0NoCWuFP05gTqZfp7_hwK@sparrow.rmq.cloudamqp.com/nxdranwu");
 
             using var connection = factory.CreateConnection();
 
@@ -28,8 +28,8 @@ namespace RabbitMQ.publisher
 
             Enum.GetNames(typeof(LogNames)).ToList().ForEach(x =>
             {
+                var routeKey = $"route-{x}";
                 var queueName = $"direct-queue-{x}";
-                var routeKey = $"route- {x}";
                 channel.QueueDeclare(queueName, true, false, false);
                 channel.QueueBind(queueName, "logs-direct", routeKey, null);
             });
