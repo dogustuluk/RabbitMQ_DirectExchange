@@ -1,4 +1,8 @@
-﻿using System;
+﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System;
+using System.Text;
+using System.Threading;
 
 namespace RabbitMQ.subscriner.queueWarning
 {
@@ -6,7 +10,33 @@ namespace RabbitMQ.subscriner.queueWarning
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var factory = new ConnectionFactory();
+            factory.Uri = new Uri("amqps://nxdranwu:n_3nr-xZlXx0NoCWuFP05gTqZfp7_hwK@sparrow.rmq.cloudamqp.com/nxdranwu ");
+
+            using var connection = factory.CreateConnection();
+
+            var channel = connection.CreateModel();
+
+            channel.BasicQos(0, 1, false);
+
+            var consumer = new EventingBasicConsumer(channel);
+
+            var queueName = "direct-queue-Warning";
+            channel.BasicConsume(queueName, false, consumer);
+
+            Console.WriteLine("Warnin loglar dinleniyor");
+
+            consumer.Received += (object sender, BasicDeliverEventArgs e) =>
+            {
+                var message = Encoding.UTF8.GetString(e.Body.ToArray());
+                Thread.Sleep(1500);
+                Console.WriteLine("Gelen Mesaj: " + message);
+
+                channel.BasicAck(e.DeliveryTag, false);
+            };
+
+            Console.ReadLine();
+
         }
     }
 }
