@@ -13,14 +13,12 @@ namespace RabbitMQ.subscriber
         {//                     direct-exchange route bilgisine göre kuyruklara gönderir.
             
             var factory = new ConnectionFactory();
-            factory.Uri = new Uri("amqps://nxdranwu:n_3nr-xZlXx0NoCWuFP05gTqZfp7_hwK@sparrow.rmq.cloudamqp.com/nxdranwu ");
+            factory.Uri = new Uri("amqps://nxdranwu:n_3nr-xZlXx0NoCWuFP05gTqZfp7_hwK@sparrow.rmq.cloudamqp.com/nxdranwu");
 
             using var connection = factory.CreateConnection();
 
             var channel = connection.CreateModel();
 
-            
-            
             channel.BasicQos(0, 1, false);
 
             var consumer = new EventingBasicConsumer(channel);

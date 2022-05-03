@@ -35,7 +35,7 @@ namespace RabbitMQ.publisher
             });
 
 
-            Enumerable.Range(1, 50).ToList().ForEach(x =>
+            Enumerable.Range(1, 100).ToList().ForEach(x =>
              {
                  LogNames log = (LogNames)new Random().Next(1, 5); //new'in solundaki alınan değerleri "LogNames"e çevir anlamındadır.
 

@@ -25,7 +25,7 @@ namespace RabbitMQ.subscriber.queueInfo
 
             channel.BasicConsume(queueName, false, consumer);
 
-            Console.WriteLine("nfo loglar dinleniyor");
+            Console.WriteLine("Info loglar dinleniyor");
 
             consumer.Received += (object sender, BasicDeliverEventArgs e) =>
             {
