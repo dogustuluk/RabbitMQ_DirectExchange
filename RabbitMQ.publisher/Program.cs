@@ -5,8 +5,16 @@ using System.Text;
 
 namespace RabbitMQ.publisher
 {
+    public enum LogNames
+    {
+        Critical = 1,
+        Error = 2,
+        Warning = 3,
+        Info = 4
+    }
     class Program
     {
+    
         static void Main(string[] args)
         {
             var factory = new ConnectionFactory();
@@ -18,14 +26,25 @@ namespace RabbitMQ.publisher
 
             channel.ExchangeDeclare("logs-direct", durable: true, type: ExchangeType.Direct);
 
+            Enum.GetNames(typeof(LogNames)).ToList().ForEach(x =>
+            {
+                var queueName = $"direct-queue-{x}";
+                var routeKey = $"route- {x}";
+                channel.QueueDeclare(queueName, true, false, false);
+                channel.QueueBind(queueName, "logs-direct", routeKey, null);
+            });
+
+
             Enumerable.Range(1, 50).ToList().ForEach(x =>
              {
-                 var message = $"log {x}";
+                 LogNames log = (LogNames)new Random().Next(1, 4); //new'in solundaki alınan değerleri "LogNames"e çevir anlamındadır.
+
+                 var message = $"log-type: {log}";
                  var messageBody = Encoding.UTF8.GetBytes(message);
+                 var routeKey = $"route-{log}";
+                 channel.BasicPublish("logs-direct", routeKey, null, messageBody);
 
-                 channel.BasicPublish("logs-direct", "", null, messageBody);
-
-                 Console.WriteLine($"Mesaj Gönderilmiştir {message}");
+                 Console.WriteLine($"Log Gönderilmiştir {message}");
              });
 
             Console.ReadLine();
