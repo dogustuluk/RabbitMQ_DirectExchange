@@ -37,7 +37,7 @@ namespace RabbitMQ.publisher
 
             Enumerable.Range(1, 50).ToList().ForEach(x =>
              {
-                 LogNames log = (LogNames)new Random().Next(1, 4); //new'in solundaki alınan değerleri "LogNames"e çevir anlamındadır.
+                 LogNames log = (LogNames)new Random().Next(1, 5); //new'in solundaki alınan değerleri "LogNames"e çevir anlamındadır.
 
                  var message = $"log-type: {log}";
                  var messageBody = Encoding.UTF8.GetBytes(message);
